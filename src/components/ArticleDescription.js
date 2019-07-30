@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import Query from '../Query';
-import {ArticleContext} from '../context/ArticleContext'
+import {ArticleContext} from '../context/ArticleContext';
+import {UserConsumer} from '../context/UserContext';
 
 class ArticleDescription extends Component {
     static contextType = ArticleContext;
@@ -32,12 +33,13 @@ class ArticleDescription extends Component {
          console.log(tags)
     }
 
-    save_article = ()=>{
+    save_article = (writer_id)=>{
+      writer_id = writer_id();
       let {tags, category, sub_category, title}  = this.state;
       let {setActiveTab} = this.props;
       if(!(tags.length && category && sub_category && title)) return
       this.setState({loading: true});
-      Query.save_article_description({tags,category, sub_category, title})
+      Query.save_article_description({tags,category, sub_category, title, writer_id})
       .then(res=>{
           this.setState({loading: false});
           this.context.update_id(res.data.article_id)
@@ -63,8 +65,8 @@ class ArticleDescription extends Component {
                         <select className="card-select" onChange={(e)=>{this.setState({category: e.target.value})}}>
                             <optgroup>
                             <option value> Select category</option>
-                                <option value> Feeding</option>
-                                <option value> Lifestyle</option>
+                                <option value = 'feeding'> Feeding</option>
+                                <option value = 'lifestyle'> Lifestyle</option>
                             </optgroup>
                         </select>
                         <i className="fa fa-chevron-down" />
@@ -130,10 +132,15 @@ class ArticleDescription extends Component {
                     </div>
                 </div>
             </div>
-            <div className="btn-wrap">
-                {/* <a href="#" className="btn btn-primary d-inline-block btn-next" onClick={()=>{setActiveTab()}}> Previous </a> */}
-                <btn  className="btn btn-primary d-inline-block btn-next" onClick={()=>{this.save_article()}}>{loading ?  <i className="fas fa-circle-notch fa-spin" /> : 'Next'}</btn>
-            </div>
+            <UserConsumer>
+                {({user_id})=>(
+                    <div className="btn-wrap">
+                    {/* <a href="#" className="btn btn-primary d-inline-block btn-next" onClick={()=>{setActiveTab()}}> Previous </a> */}
+                    <btn  className="btn btn-primary d-inline-block btn-next" onClick={()=>{this.save_article(user_id)}}>{loading ?  <i className="fas fa-circle-notch fa-spin" /> : 'Next'}</btn>
+                    </div>
+                )}
+            </UserConsumer>
+            
         </div>
         )
     }

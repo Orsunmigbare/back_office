@@ -4,3 +4,7 @@ export const SIGN_UP = 'signup';
 export const SAVE_ARTICLE_DESCRIPTION = 'save_article_description';
 export const SAVE_ARTICLE_CONTENT = 'save_article_content';
 export const SAVE_ARTICLE_IMAGES = 'save_article_images';
+export const GET_ARTICLE_LIST = 'get_articles_list';
+export const GET_ARTICLE_DESCRIPTION = 'get_article_description';
+export const GET_ARTICLE_CONTENT = 'get_article_content';
+export const GET_ARTICLE_IMAGES = 'get_article_images';
